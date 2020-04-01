@@ -13,6 +13,7 @@ def save_location(request):
     location.name=request_body.get("name")
     location.city=request_body.get("city")
     images = Images(url=upload_file_to_azure(request_body.get("image")))
+    location.save()
     images.save()
     location.images.add(images)
     return JsonResponse({'OK': 'OK'}, status=201)
