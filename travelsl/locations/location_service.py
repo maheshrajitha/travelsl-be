@@ -2,7 +2,7 @@ from django.http import JsonResponse , HttpResponse
 import json
 from .models import Location, LocationImages , Images
 from .photo_upload import upload_file_to_azure
-from django.core.serializers import serialize
+import requests
 
 # @check_role(1)
 #@require_POST
@@ -50,3 +50,34 @@ def get_locations(request):
         }
         locations.append(location)
     return HttpResponse([locations],content_type="application/json")
+
+
+def get_location_by_id(request , location_id):
+    location = Location.objects.get(id=location_id)
+    if location is not None :
+        images_list = list()
+        for image in location.images.all():
+            images_list.append(image.url)
+        location_by_id = {
+            "name" : location.name,
+            "description": location.description,
+            "images" : images_list,
+            "id" : str(location.id),
+            "city" : location.city
+        }
+        print(location_by_id)
+        return HttpResponse([location_by_id],content_type="application/json")
+
+def get_location_weather(request , city):
+    response_fro_open_weather_api = requests.get("http://api.openweathermap.org/data/2.5/weather?q={},LK&units=metric&appid=6432bcdf6dc50b554d8b96cc9833e991".format(city))
+    #print(response_fro_open_weather_api.json())
+    if response_fro_open_weather_api.status_code == 200 :
+        json_response = response_fro_open_weather_api.json()
+        weather = {
+            "description" : json_response.get("weather")[0].get("description"),
+            "icon" : "http://openweathermap.org/img/w/{}.png".format(json_response.get("weather")[0].get("icon")),
+            "temp" : json_response.get("main").get("temp"),
+        }
+        return HttpResponse([weather],content_type="application/json")
+    else:
+        return JsonResponse({"ERROR_OCCURED":True},status=500)

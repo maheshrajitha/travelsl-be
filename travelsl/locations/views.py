@@ -1,5 +1,5 @@
 from .access_middleware import check_role
-from .location_service import save_location , get_locations
+from .location_service import save_location , get_locations , get_location_by_id , get_location_weather
 from django.views.decorators.http import require_GET , require_POST
 # Create your views here.
 
@@ -10,3 +10,9 @@ def save(request):
 
 def get_all(request):
     return get_locations(request)
+
+def get_by_id(request , location_id):
+    return get_location_by_id(request,location_id)
+
+def get_weather(request , city):
+    return get_location_weather(request , city)
