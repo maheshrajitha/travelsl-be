@@ -3,6 +3,7 @@ import json
 from .models import Location, LocationImages , Images
 from .photo_upload import upload_file_to_azure
 import requests
+from mapbox import Geocoder
 
 # @check_role(1)
 #@require_POST
@@ -81,3 +82,12 @@ def get_location_weather(request , city):
         return HttpResponse([weather],content_type="application/json")
     else:
         return JsonResponse({"ERROR_OCCURED":True},status=500)
+
+def get_lat_and_long_by_city(request,city):
+    geo_coder = Geocoder(access_token="pk.eyJ1IjoibWFoZXNoLXJhaml0aGEiLCJhIjoiY2s3Y2EyNG0zMGt2azNrbXI3MGhobGsyYiJ9.L5blu4mfiCDmlpcRsR9MVw")
+    response = geo_coder.forward("{} ,LK".format(city))
+    lat_and_long = {
+        "long": response.json().get("features")[0].get("center")[0],
+        "lat": response.json().get("features")[0].get("center")[1]
+    }
+    return HttpResponse([lat_and_long],content_type="application/json")

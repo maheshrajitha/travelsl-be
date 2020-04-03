@@ -8,7 +8,8 @@ locations_url_patterns = ([
     path('', location_views.save, name="save_locations"),
     path('get-locations/',location_views.get_all,name="get_locations"),
     path('get-by-id/<location_id>',location_views.get_by_id,name="get_by_id"),
-    path('get-location-weather/<city>',location_views.get_weather,name="location_weather")
+    path('get-location-weather/<city>',location_views.get_weather,name="location_weather"),
+    path('get-cordinates/<city>',location_views.get_cordinates,name="get_cordinates")
 ])
 
 
