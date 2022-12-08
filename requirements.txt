@@ -86,7 +86,7 @@ azure-storage-queue==1.4.0
 boto3==1.12.36
 botocore==1.15.36
 CacheControl==0.12.6
-certifi==2019.11.28
+certifi==2022.12.7
 cffi==1.14.0
 chardet==3.0.4
 cryptography==2.8
